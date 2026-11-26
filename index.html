@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>골라골라 · 이번주 코스트코 할인 전단</title>
+<meta name="description" content="매주 월요일 업데이트되는 코스트코 할인 600여 개를 인기순으로 정리한 온라인 전단. 카테고리·상품코드로 바로 찾아보세요.">
+<link rel="canonical" href="https://gollagolla.kr/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="골라골라">
+<meta property="og:title" content="골라골라 · 이번주 코스트코 할인 전단">
+<meta property="og:description" content="코스트코 이번주 할인 600여 개, 인기순으로 골라보기">
+<meta property="og:url" content="https://gollagolla.kr/">
+<meta property="og:image" content="https://gollagolla.kr/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#d4211a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d4211a'/%3E%3Ctext x='32' y='45' font-size='36' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='900'%3E골%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* VOICE: 동네 마트 전단지처럼 눈에 확 들어오지만, 폰에서 편하게 읽히는 가격 안내
+   IDEA: 매주 문앞에 꽂히는 종이 전단지 — 빨간 가격, 노란 형광펜, 별딱지
+   PICTURE: 첫 화면 = 이번주 TOP3 별딱지 가격표
+   COLOUR and TYPE: 종이 흰색 + 전단 빨강(가격만) + 노랑(할인·포인트만) / Noto Sans KR 400·700·900 한 가족
+   LAYOUT: 전단 1면(헤더+TOP3) → 인기 순위 → 영상 픽 → 전체 상품 → 리스트 넣기 → 출처, 폰은 한 줄 세로 */
+:root{color-scheme:light dark;
+--bg:light-dark(#f4f1ea,#15110f);--paper:light-dark(#fff,#211b18);--ink:light-dark(#16110f,#f7f2ec);
+--mute:light-dark(#4f4741,#cdc3b9);--red:light-dark(#d4211a,#ff6a5e);--yel:#ffd400;--hl:light-dark(#fff0a0,#5a4a00);
+--line:light-dark(#e3dbd0,#3d342f);--blue:light-dark(#1747a6,#8fb2ff)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 "Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;overflow-x:clip;word-break:keep-all;overflow-wrap:anywhere}
+.band{padding:clamp(28px,4vw,56px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+h1,h2{font-weight:900;letter-spacing:-.01em}
+.price,.num{font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+h2{font-size:clamp(26px,3.4vw,36px);line-height:1.15;margin:0 0 6px;text-wrap:balance}
+.sub{color:var(--mute);margin:0 0 20px;font-size:16px}
+mark,.hl{background:linear-gradient(transparent 55%,var(--hl) 55%);color:inherit;padding:0 2px}
+/* 헤더 */
+.top{background:var(--red);color:#fff;position:sticky;top:0;z-index:5}
+.nav{display:flex;gap:6px 18px;align-items:center;justify-content:space-between;padding:10px max(5vw,16px);max-width:1240px;margin:0 auto}
+.logo{font-weight:900;font-size:24px;display:flex;gap:8px;align-items:center;color:#fff;text-decoration:none;flex:none;white-space:nowrap}
+.logo small{font-weight:700;font-size:13px;background:#fff;color:var(--red);padding:2px 8px;border-radius:4px}
+.nav nav{display:flex;gap:2px 14px;overflow-x:auto;scrollbar-width:none}
+.nav nav::-webkit-scrollbar{display:none}
+.nav nav a{color:#fff;text-decoration:none;font-weight:700;font-size:16px;padding:10px 2px;white-space:nowrap;flex:none}
+.nav nav a:hover{text-decoration:underline}
+/* 1면 */
+.front{background:var(--paper);border-bottom:3px dashed var(--line)}
+.fgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:clamp(24px,3vw,40px);align-items:center}
+.week{display:inline-block;background:var(--ink);color:var(--paper);font-weight:700;padding:4px 12px;border-radius:4px;font-size:15px}
+.front h1{font-size:clamp(34px,5.6vw,58px);line-height:1.15;margin:14px 0 12px;text-wrap:balance}
+.front h1 em{font-style:normal;background:linear-gradient(transparent 58%,var(--yel) 58%);padding:0 4px}
+.front p{margin:0 0 18px;max-width:34em}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-width:520px}
+.stat{border:2px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--bg)}
+.stat b{display:block;font-weight:900;font-size:24px;line-height:1.2}
+.stat:first-child b{color:var(--red)}
+.stat span{font-size:14px;color:var(--mute)}
+.top3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.hot{position:relative;background:var(--bg);border-radius:14px;padding:62px 14px 16px;text-align:center;border:2px solid var(--ink)}
+.burst{position:absolute;top:-28px;left:50%;transform:translateX(-50%) rotate(-8deg);width:92px;height:92px}
+.burst svg{display:block;width:100%;height:100%;filter:drop-shadow(2px 3px 0 rgba(0,0,0,.25))}
+.burst b{position:absolute;inset:0;display:grid;place-items:center;font-weight:900;font-size:21px;line-height:1;color:#16110f}
+.hot .rk{margin-bottom:2px}
+.hot .nm{font-weight:700;font-size:16px;line-height:1.4;min-height:2.8em}
+.hot .was{color:var(--mute);text-decoration:line-through;font-size:15px;margin-top:6px}
+.hot .price{font-size:clamp(28px,3vw,34px);color:var(--red);line-height:1.15;white-space:nowrap}
+.hot .end{font-size:14px;margin-top:4px;font-weight:700}
+/* 인기 순위 */
+.rank{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:4px 28px}
+.row{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:start;padding:14px 0;border-bottom:1px solid var(--line)}
+.row .no{font-weight:900;font-size:22px;line-height:40px;height:40px;text-align:center;border-radius:8px;background:var(--bg)}
+.row:nth-child(-n+3) .no{background:var(--yel);color:#16110f}
+.row b{display:block;line-height:1.4;font-size:17px}
+.row small{color:var(--mute);font-size:14px}
+.meter{height:6px;background:var(--line);border-radius:3px;margin-top:8px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--ink);opacity:.55}
+.row .pr{text-align:right;white-space:nowrap}
+.row .pr b{font-weight:900;font-size:21px;color:var(--red);font-variant-numeric:tabular-nums}
+.row .pr small{display:none}
+.code{display:block;font-size:13px;font-weight:500;color:var(--mute);font-variant-numeric:tabular-nums;letter-spacing:.02em;margin-top:1px}
+.rk{font-size:14px;font-weight:700;color:var(--blue)}
+.sigs{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}.sigs span{font-size:13px;padding:2px 8px;border-radius:4px;background:var(--bg);color:var(--mute)}.sigs .best{background:var(--yel);color:#16110f;font-weight:700}.sigs .tg{background:light-dark(#fdecea,#3a1d1a);color:var(--red);font-weight:700}
+/* 구매 버튼 */
+.buy{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.buy a{font-weight:700;font-size:15px;text-decoration:none;padding:0 14px;border-radius:8px;min-height:40px;display:inline-flex;align-items:center;white-space:nowrap}
+.buy .cp{background:var(--ink);color:var(--paper)}
+.hb .buy{justify-content:center}
+.seller{font-size:13px;font-weight:700;color:var(--mute);margin-top:4px}
+.aff{font-size:13px;color:var(--mute);margin:-6px 0 14px}
+.disc{background:var(--yel);color:#16110f;font-size:13px;font-weight:700;text-align:center;padding:6px 12px;line-height:1.4}
+/* 영상 픽 */
+.picks{counter-reset:k;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.pick{background:var(--paper);border-radius:12px;padding:16px 16px 16px 60px;position:relative;border:1px solid var(--line)}
+.pick::before{counter-increment:k;content:counter(k);position:absolute;left:16px;top:16px;width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-weight:900;font-size:16px}
+.pick b{display:block;font-size:17px}
+.pick .hook{font-weight:700;font-size:16px;margin:4px 0}
+.pick .hook span{background:linear-gradient(transparent 55%,var(--hl) 55%)}
+.pick small{color:var(--mute);font-size:14px}
+.pick .shot{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;margin:0 0 10px;background:var(--bg)}
+.buy .vt{background:var(--red);color:#fff}
+.pick:has(.shot){padding-left:16px}.pick:has(.shot)::before{left:24px;top:24px;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+#pickSub a{color:var(--blue);font-weight:700}
+/* 필터 */
+.bar{display:flex;gap:8px;align-items:center;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.chip{flex:none;font:700 15px "Noto Sans KR",sans-serif;min-height:44px;padding:0 16px;border-radius:22px;border:2px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;white-space:nowrap}
+.chip[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.ctl input,.ctl select{font:16px "Noto Sans KR",sans-serif;min-height:48px;padding:0 12px;border-radius:10px;border:2px solid var(--line);background:var(--paper);color:var(--ink)}
+.ctl input{flex:1 1 220px}
+.ctl select{flex:1 1 150px}
+.count{color:var(--mute);font-size:15px;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--paper);border-radius:12px;padding:16px;border:1px solid var(--line);display:flex;flex-direction:column;gap:4px;position:relative}
+.card .head{display:flex;gap:10px;align-items:center;padding-right:60px}
+.card .pct{position:absolute;top:12px;right:12px;background:var(--yel);color:#16110f;font-weight:900;font-size:17px;padding:3px 9px;border-radius:6px;transform:rotate(3deg)}
+.card .cat{font-size:14px;color:var(--mute)}
+.card .nm{font-weight:700;font-size:17px;line-height:1.4}
+.card .was{color:var(--mute);font-size:15px;margin-top:auto;padding-top:6px}
+.card .was s{margin-right:6px}
+.card .price{font-size:30px;color:var(--red);line-height:1.15;white-space:nowrap}
+.meta{display:flex;flex-wrap:wrap;gap:6px;font-size:13px;margin-top:6px}
+.tag{padding:2px 8px;border-radius:4px;background:var(--bg);color:var(--mute);font-weight:500}
+.tag.on{background:var(--blue);color:#fff}
+.tag.soon{background:var(--red);color:#fff;font-weight:700}
+.empty{padding:40px;text-align:center;color:var(--mute);background:var(--paper);border-radius:12px}
+/* 리스트 넣기 */
+.box{background:var(--paper);border-radius:12px;padding:clamp(16px,3vw,28px);border:2px dashed var(--line)}
+.box textarea{width:100%;min-height:160px;font:15px/1.5 ui-monospace,monospace;padding:12px;border-radius:8px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btn{font:700 16px "Noto Sans KR",sans-serif;min-height:48px;padding:0 18px;border-radius:10px;border:0;background:var(--red);color:#fff;cursor:pointer}
+.btn.g{background:var(--ink);color:var(--paper)}
+#msg{font-size:15px;margin-top:8px;color:var(--blue);font-weight:700}
+code{background:var(--bg);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+footer{background:var(--ink);color:var(--paper);font-size:15px}
+footer a{color:var(--yel)}
+footer ul{margin:10px 0 0;padding-left:18px}
+.fnote{margin:0 0 8px;font-weight:700}
+.fmore summary{cursor:pointer;min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border:1px solid currentColor;border-radius:22px;font-weight:700;list-style:none}
+.fmore summary::-webkit-details-marker{display:none}
+.fmore summary::after{content:" ▾";margin-left:4px}.fmore[open] summary::after{content:" ▴"}
+footer li{margin-bottom:4px}
+@media(max-width:860px){.fgrid{grid-template-columns:1fr}}
+@media(max-width:600px){
+  html{scroll-padding-top:108px}
+  .nav{flex-direction:column;align-items:stretch;padding:8px 16px 0}
+  .nav nav{margin:0 -16px;padding:0 16px}
+  .top3{grid-template-columns:1fr;gap:10px}
+  .hot{display:grid;grid-template-columns:76px minmax(0,1fr);gap:0 14px;text-align:left;padding:14px;align-items:center}
+  .burst{position:relative;top:auto;left:auto;transform:rotate(-8deg);width:76px;height:76px;grid-column:1;grid-row:1/span 6}
+  .burst b{font-size:18px}
+  .hot .nm{min-height:0}
+  .hot .was{margin-top:2px}
+  .hb .buy{justify-content:flex-start}
+  .rank{grid-template-columns:1fr}
+  .row{grid-template-columns:36px minmax(0,1fr)}
+  .row .no{font-size:19px;height:36px;line-height:36px}
+  .row .pr{grid-column:2;text-align:left;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .row .pr br{display:none}
+  .row .pr .buy{margin-top:0}
+  .grid{grid-template-columns:1fr}
+  .card .price{font-size:32px}
+}
+@media(prefers-reduced-motion:no-preference){.chip,.buy a{transition:background .15s}}
+</style>
+</head>
+<body>
+<div class="disc" id="disc" hidden>이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
+<header class="top">
+  <div class="nav">
+    <a class="logo" href="#top">골라골라 <small>이번주 할인 전단</small></a>
+    <nav><a href="#rank">인기 순위</a><a href="#picks" id="pickNav" hidden>영상 픽</a><a href="#deals">전체 할인</a><a href="#about">출처</a></nav>
+  </div>
+</header>
+
+<section class="band front" id="top">
+  <div class="wrap fgrid">
+    <div>
+      <span class="week" id="weekLabel">이번주 전단</span>
+      <h1>골라골라, 이번주는<br><em>이거</em>부터 담으세요</h1>
+      <p>매주 월요일 업데이트되는 코스트코 할인 전단. 매장 할인 600여 개를 한 장에 모아 카테고리·시즌별로 정리했어요. 지점마다 행사가 다를 수 있으니 방문 전 꼭 확인!</p>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="top3" id="top3"></div>
+  </div>
+</section>
+
+<section class="band" id="rank">
+  <div class="wrap">
+    <h2>이번주 인기 TOP 20</h2>
+    <p class="sub">자주 사는 식품·생활용품 위주로, 지금 많이 찾고 잘 팔리는 할인 상품 순위</p>
+    <div class="bar" id="rtabs"></div>
+    <p class="aff">가격은 코스트코 매장 행사가예요. ‘쿠팡’ 버튼은 쿠팡 파트너스 제휴 링크이고, 쿠팡 가격·용량은 다를 수 있어요.</p>
+    <div class="rank" id="rankList"></div>
+  </div>
+</section>
+
+<section class="band" id="picks" hidden>
+  <div class="wrap">
+    <h2>이번주 영상 픽</h2>
+    <p class="sub" id="pickSub"></p>
+    <div class="picks" id="pickList"></div>
+  </div>
+</section>
+
+<section class="band" id="deals" style="background:var(--paper)">
+  <div class="wrap">
+    <h2>전체 할인 상품</h2>
+    <p class="sub">태그를 눌러 골라보기 · 가격은 지점·시점마다 다를 수 있음</p>
+    <div class="bar" id="tags"></div>
+    <div class="ctl">
+      <input id="q" type="search" placeholder="상품명·상품코드 검색 (예: 다운, 627908)" aria-label="상품 검색">
+      <select id="cat" aria-label="카테고리"></select>
+      <select id="sort" aria-label="정렬">
+        <option value="rank">인기순</option>
+        <option value="pct">할인율 높은 순</option>
+        <option value="amt">할인액 큰 순</option>
+        <option value="end">마감 빠른 순</option>
+        <option value="low">가격 낮은 순</option>
+      </select>
+    </div>
+    <p class="aff">가격은 코스트코 매장 행사가예요. ‘쿠팡’ 버튼은 쿠팡 파트너스 제휴 링크이고, 쿠팡 가격·용량은 다를 수 있어요.</p>
+    <p class="count" id="count"></p>
+    <div class="grid" id="grid"></div>
+    <div class="btns" style="justify-content:center;margin-top:18px"><button class="btn g" id="more" hidden></button></div>
+  </div>
+</section>
+
+
+
+<footer class="band" id="about">
+  <div class="wrap">
+    <p class="fnote">골라골라는 코스트코 공식 사이트가 아니에요 · 지점마다 행사·가격이 다를 수 있어요</p>
+    <details class="fmore"><summary>출처·순위 기준 보기</summary>
+    <ul>
+      <li>매장 할인: 매주 받는 코스트코 매장 할인 리스트 기준이에요. 지점마다 행사·재고가 달라서 실제 매장과 차이가 날 수 있어요.</li>
+      <li>인기점수(100점) = 아래 신호 합계의 90% + 생활 소비 10(식품·생활용품처럼 자주 사는 상품일수록 높게). 신호: 지금 관심 30(검색 추이, ‘코스트코’ 급상승 검색어) + 판매 검증 20(코스트코 온라인 반응·공식 베스트) + 대중성 15(1만원 이하 만점, 50만원 이상 0) + 할인 15 + 시즌 10 + 작년 이맘때 인기 10</li>
+      <li>판매 검증: 코스트코 온라인몰 리뷰 수, 코스트코 공식 ‘가장 많이 판매된/검색된 상품’ 포함 여부. 같은 상품 여러 사이즈는 하나만 위로 올려요.</li>
+      <li>실제 판매량은 공개되지 않아서, 위 신호로 만든 추정 순위예요.</li>
+      <li>할인율은 정상가와 적용가로 계산했어요. ‘추천’ 태그는 카테고리별 할인율 상위 상품이에요.</li>
+      <li>‘쿠팡에서 보기’는 쿠팡 파트너스 링크예요. 인기 상위 상품은 쿠팡에서 같은 상품을 찾아 상품 링크를 붙였고, 못 찾은 상품은 쿠팡 검색 결과로 연결돼요. 코스트코와 용량·가격이 다를 수 있어요.</li>
+      
+    </ul>
+    </details>
+  </div>
+</footer>
+
+<script>
+{
+const kst=()=>{const n=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Seoul"}));n.setHours(0,0,0,0);return n};
+let TODAY=kst(), MON=null;
+/* 날짜: 'YYYY-MM-DD' 권장. 예전 'MM-DD'는 오늘 기준 ±6개월 안의 연도로 해석 */
+const toD=e=>{if(!e)return null;const a=e.split("-").map(Number);if(a.length===3)return new Date(a[0],a[1]-1,a[2]);let y=TODAY.getFullYear(),t=new Date(y,a[0]-1,a[1]);if(t-TODAY>1555e7)t=new Date(y-1,a[0]-1,a[1]);else if(TODAY-t>1555e7)t=new Date(y+1,a[0]-1,a[1]);return t};
+const md=e=>e?e.slice(-5).replace("-","."):"";
+/* 제휴 설정: 쿠팡 파트너스 / 네이버 쇼핑 커넥트 가입 후 on:true 로 바꾸면 상단 고지 문구가 켜짐.
+   상품별 제휴 링크는 deals.json 의 cp(쿠팡)·nv(네이버) 필드에 넣으면 그 링크가 우선 쓰임 */
+const AFF={on:true};
+/* 상품 사진: 데이터 용량 때문에 우선 텍스트만 씀 */
+const thumb=x=>"";
+const UNIT={"개":"개","입":"개","캔":"캔","봉":"봉","롤":"롤","매":"매","PR":"켤레","PK":"개","P":"개","팩":"개","CT":"개","정":"정"};
+const KW=[[/논알콜|무알콜/,"논알콜"],[/맥주|와인|샤도네|위스키|짐빔|하이네켄|코젤|소주|막걸리/,"홈술"],[/하겐다즈|교자|만두|아이스크림|냉동/,"냉동실 쟁여템"],[/삼겹|돈육|목살|소고기|한우|닭|갈비/,"고기 특가"],[/단감|사과|귤|딸기|배 |샤인|포도|바나나/,"제철 과일"],[/하리보|젤리|과자|초콜릿|킨더|프링글스|맛밤|견과|쿠키|칩/,"간식 쟁이기"],[/커피|캡슐|원두/,"홈카페"],[/햇반|즉석|주먹밥|라면|스팸|통조림|소스/,"자취템"],[/세제|다우니|페브리즈|휴지|티슈|크리넥스|치약|센소다인|리스테린|건전지|듀라셀|섬유/,"생필품 쟁이기"],[/핫팩|담요|패딩|다운|스타킹|양말|부츠|기모/,"추위 대비"],[/트리|장식|리스|크리스마스|오너먼트/,"크리스마스"]];
+const tags=x=>{const n=x.n.toUpperCase(),T=[];
+  const m=n.match(/(\d+)\s*(개|입|캔|봉|롤|매|PR|PK|팩|CT|정|P)(?![A-Z])/);const mx=n.match(/X\s*(\d+)\s*$/);const k=m?+m[1]*(mx&&!/X\s*\d+\s*(개|입|캔|봉|롤|매|PR|PK|팩|CT|정|P)/.test(n)?+mx[1]:1):0;
+  if(k>=2&&x.p/k>=50)T.push(`1${UNIT[m[2]]} ${Math.round(x.p/k).toLocaleString("ko-KR")}원꼴`);
+  const kw=KW.find(([r])=>r.test(x.n));if(kw)T.push(kw[1]);
+  const d=days(x.e);if(x.e&&d<=3)T.push("곧 마감");else if(x.pc>=30)T.push(`${x.pc}% 할인`);
+  if(T.length<3&&x.p<=10000)T.push("만원 이하");
+  if(T.length<3&&!kw&&(x.t||[]).includes("겨울"))T.push("겨울 준비");
+  return T.slice(0,3)};
+const sigs=x=>{const s=x.sig||{};const h=tags(x).map(t=>`<span class="tg">#${esc(t)}</span>`).join("")+(s.best?`<span class="best">코스트코 공식 베스트</span>`:"")+(s.ly?`<span>작년 이맘때 인기 ‘${esc(s.ly)}’</span>`:"")+(s.ty?`<span>지금 뜨는 검색 ‘${esc(s.ty)}’</span>`:"");return h?`<div class="sigs">${h}</div>`:""};
+/* 영상 픽: deals.json meta.video = {title, url(유튜브), picks:[{id 상품코드, hook 한줄, t 영상 초, img 'img/파일.webp'}]} 가 있을 때만 보임 */
+const ytAt=(u,t)=>{if(!u)return "";if(!t)return u;return u+(u.includes("?")?"&":"?")+"t="+Math.floor(t)};
+const mmss=t=>`${Math.floor(t/60)}분 ${String(Math.floor(t%60)).padStart(2,"0")}초`;
+function renderPicks(L){
+  const v=META&&META.video, sec=$("picks"), nav=$("pickNav");
+  const P=v&&Array.isArray(v.picks)?v.picks.map(p=>({p,x:L.find(x=>x.id&&String(x.id)===String(p.id))})).filter(o=>o.x):[];
+  const on=!!(v&&v.url&&P.length);sec.hidden=!on;nav.hidden=!on;if(!on)return;
+  $("pickSub").innerHTML=`영상에 나온 상품 그대로 · <a href="${esc(v.url)}" target="_blank" rel="noopener">${esc(v.title||"이번주 영상 보기")} ▶</a>`;
+  $("pickList").innerHTML=P.map(({p,x})=>`<div class="pick">${p.img?`<img class="shot" src="${esc(p.img)}" alt="" loading="lazy">`:""}<b>${esc(x.n)}</b>${code(x)}${p.hook?`<div class="hook"><span>“${esc(p.hook)}”</span></div>`:""}<small>${won(x.p)}${x.pc?` · ${x.pc}% 할인`:""} · ${esc(endTxt(x))}</small><div class="buy">${p.t!=null?`<a class="vt" href="${esc(ytAt(v.url,p.t))}" target="_blank" rel="noopener">▶ 영상 ${mmss(p.t)}</a>`:""}${buy(x).replace(/^<div class="buy">|<\/div>$/g,"")}</div></div>`).join("");
+}
+const code=x=>x.id?`<span class="code">상품코드 ${esc(x.id)}</span>`:"";
+const qname=n=>n.replace(/\s\d.*$/,"").replace(/[()#*]/g," ").replace(/\s+/g," ").trim()||n;
+const buy=x=>{const q=encodeURIComponent(qname(x.n));const cp=x.cp||`https://www.coupang.com/np/search?q=${q}`;const same=/AFFSDP/.test(x.cp||"");return `<div class="buy"><a class="cp" href="${esc(cp)}" target="_blank" rel="noopener sponsored">${same?"쿠팡 같은 상품 보기":"쿠팡에서 검색"}</a></div>`};
+const DEPT={12:"과자·간식",13:"가공식품",14:"생활·음료",16:"주류",17:"냉장식품",18:"냉동식품",19:"치즈·델리",20:"뷰티·위생",23:"생활·공구",24:"가전·디지털",25:"자동차용품",26:"스포츠·레저",27:"원예·시즌",28:"크리스마스·시즌",31:"의류·잡화",35:"의류·잡화",39:"의류·잡화",32:"주방용품",33:"주방가전·커피",34:"침구",38:"가구·인테리어",44:"가구·인테리어",61:"정육",62:"베이커리",63:"델리·간편식",64:"수산·건어물",65:"과일·채소",93:"건강식품"};
+let BASE=[], META={};
+const TAGS=["전체","이번주 시작","마감임박","겨울","연말","블프","인기","추천","매장","온라인"];
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const won=n=>Number(n).toLocaleString("ko-KR")+"원";
+const days=e=>{const t=toD(e);return t?Math.round((t-TODAY)/864e5):99};
+const pct=x=>x.o>x.p?Math.round((x.o-x.p)/x.o*100):0;
+const endTxt=x=>{if(!x.e)return "온라인 상시";const d=days(x.e);return d<=0?"오늘 마감":d<=5?`D-${d} · ${md(x.e)}까지`:`${md(x.e)}까지`};
+let DATA=[], tag="전체", shown=48;
+const $=id=>document.getElementById(id);
+const prep=a=>a.filter(x=>days(x.e)>=0).map(x=>({...x,pc:pct(x),am:x.o>x.p?x.o-x.p:0}));
+function renderTop(){
+  const L=prep(DATA), top=(L[0]&&L[0].rk?[...L].sort((a,b)=>a.rk-b.rk):[...L].filter(x=>x.pc).sort((a,b)=>b.pc-a.pc)).slice(0,3);
+  const star='<svg viewBox="0 0 100 100" aria-hidden="true"><polygon fill="#ffd400" stroke="#1a1412" stroke-width="2" points="'+Array.from({length:32},(_,i)=>{const r=i%2?38:49,a=i*Math.PI/16;return (50+r*Math.cos(a)).toFixed(1)+","+(50+r*Math.sin(a)).toFixed(1)}).join(" ")+'"/></svg>';
+  $("top3").innerHTML=top.map(x=>`<div class="hot">${x.rk?`<div class="rk">인기 ${x.rk}위</div>`:""}<div class="burst">${star}<b>-${x.pc}%</b></div><div class="nm">${esc(x.n)}${code(x)}</div><div class="was">${won(x.o)}</div><div class="price">${won(x.p)}</div><div class="end">${esc(endTxt(x))}</div><div class="hb">${buy(x)}</div></div>`).join("");
+  const tot=L.reduce((s,x)=>s+x.am,0), soon=L.filter(x=>x.e&&days(x.e)<=5).length;
+  $("stats").innerHTML=`<div class="stat"><b>${L.length}개</b><span>이번주 할인 상품</span></div><div class="stat"><b>${L.filter(x=>x.s&&MON&&toD(x.s)>=MON).length}개</b><span>이번주 새로 시작</span></div><div class="stat"><b>${soon}개</b><span>5일 안에 마감</span></div><div class="stat"><b>최대 ${Math.max(0,...L.map(x=>x.pc))}%</b><span>할인율</span></div>`;
+  renderPicks(L);
+}
+let rcat="전체";
+function renderRank(){
+  const L=prep(DATA).filter(x=>x.rk&&!x.chk), cats=["전체",...[...new Set(L.map(x=>x.c))].sort()];
+  const top=cats.slice(0,1).concat(cats.slice(1).sort((a,b)=>L.filter(x=>x.c===b).length-L.filter(x=>x.c===a).length).slice(0,7));
+  $("rtabs").innerHTML=top.map(c=>`<button class="chip" aria-pressed="${c===rcat}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
+  const R=L.filter(x=>rcat==="전체"||x.c===rcat).sort((a,b)=>a.rk-b.rk).slice(0,20);
+  $("rankList").innerHTML=R.length?R.map((x,i)=>`<div class="row"><div class="no">${i+1}</div>${thumb(x)}<div><b>${esc(x.n)}</b>${code(x)}<small>${esc(x.c)} · ${x.pc}% 할인 · ${esc(endTxt(x))}</small>${sigs(x)}<div class="meter" title="인기점수 ${x.sc}"><i style="width:${Math.max(4,Math.min(100,x.sc))}%"></i></div></div><div class="pr"><b>${won(x.p)}</b><br><small>점수 ${x.sc}</small>${buy(x)}</div></div>`).join(""):'<div class="empty">순위 정보가 없는 리스트예요</div>';
+}
+function renderGrid(){
+  const q=$("q").value.trim().toLowerCase(), c=$("cat").value, so=$("sort").value;
+  let L=prep(DATA).filter(x=>{
+    if(q&&!x.n.toLowerCase().includes(q)&&!(x.id||"").includes(q))return false;
+    if(c&&x.c!==c)return false;
+    if(tag==="전체")return true;
+    if(tag==="이번주 시작")return !!(x.s&&MON&&toD(x.s)>=MON);
+    if(tag==="마감임박")return x.e&&days(x.e)<=5;
+    if(tag==="매장"||tag==="온라인")return (x.src||"매장")===tag;
+    return (x.t||[]).includes(tag)});
+  const f={rank:(a,b)=>(a.rk||1e9)-(b.rk||1e9),pct:(a,b)=>b.pc-a.pc,amt:(a,b)=>b.am-a.am,end:(a,b)=>days(a.e)-days(b.e),low:(a,b)=>a.p-b.p}[so];
+  L.sort(f);
+  $("count").textContent=`${L.length}개 상품`; const all=L.length; L=L.slice(0,shown);
+  $("more").hidden=shown>=all; $("more").textContent=`더 보기 (${all-L.length}개 남음)`;
+  $("grid").innerHTML=L.length?L.map(x=>{const d=days(x.e);return `<article class="card">${x.pc?`<span class="pct">-${x.pc}%</span>`:""}
+    <div class="head">${thumb(x)}<div><span class="cat">${esc(x.c)}${x.crk&&x.crk<=10?` · <b class="rk">${esc(x.c.split("/")[0])} 인기 ${x.crk}위</b>`:""}</span><div class="nm" style="padding-right:0">${esc(x.n)}</div>${code(x)}</div></div>
+    <div class="was">${x.o>x.p?`<s>${won(x.o)}</s>${won(x.am)} 할인`:"온라인 스낵딜 특가"}</div>
+    <div class="seller">코스트코 매장가</div><div class="price">${won(x.p)}</div>
+    <div class="meta"><span class="tag ${x.src==="온라인"?"on":""}">${esc(x.src||"매장")}</span>${x.lim?`<span class="tag soon">${esc(x.lim)}</span>`:""}${x.chk?`<span class="tag soon">가격 확인 필요</span>`:""}<span class="tag ${x.e&&d<=5?"soon":""}">${esc(endTxt(x))}</span>${(x.t||[]).map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>
+    <div class="cat">${esc(md(x.s))} ~ ${esc(md(x.e))}</div>${buy(x)}</article>`}).join(""):'<div class="empty">조건에 맞는 상품이 없어요</div>';
+}
+function renderCtl(){
+  $("tags").innerHTML=TAGS.map(t=>`<button class="chip" aria-pressed="${t===tag}" data-t="${esc(t)}">${esc(t)}</button>`).join("");
+  const cats=[...new Set(DATA.map(x=>x.c))].sort();
+  $("cat").innerHTML='<option value="">카테고리 전체</option>'+cats.map(c=>`<option>${esc(c)}</option>`).join("");
+}
+function all(){$("disc").hidden=!AFF.on;renderCtl();renderTop();renderRank();renderGrid()}
+$("tags").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;tag=b.dataset.t;shown=48;renderCtl();renderGrid()});
+$("rtabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;rcat=b.dataset.c;renderRank()});
+["q","cat","sort"].forEach(id=>$(id).addEventListener("input",()=>{shown=48;renderGrid()}));
+$("more").addEventListener("click",()=>{shown+=48;renderGrid()});
+const num=s=>Number(String(s||"").replace(/[^\d]/g,""))||0;
+$("apply")&&$("apply").addEventListener("click",()=>{
+  const rows=$("paste").value.trim().split(/\r?\n/).map(r=>r.split(r.includes("\t")?"\t":","));
+  const hi=rows.findIndex(r=>r.some(c=>c.includes("상품")));if(hi>0)rows.splice(0,hi);
+  if(rows.length<2){$("msg").textContent="제목 줄 + 상품 한 줄 이상 붙여넣어줘";return}
+  const H=rows[0].map(h=>h.trim()), ix=k=>H.findIndex(h=>h.includes(k));
+  const fx=(...ks)=>{for(const k of ks){const i=ix(k);if(i>=0)return i}return -1};
+  const I={id:fx("Item","상품코드","코드"),n:fx("상품"),c:fx("카테"),d:fx("DEPT"),o:fx("정상가","정가"),p:fx("적용가","할인가"),e:fx("끝","종료"),st:fx("시작"),s:H.findIndex(h=>h==="매장"||h==="구분"&&false),t:fx("태그")};
+  if(I.n<0||I.p<0){$("msg").textContent="‘상품명’, ‘할인가’ 열은 꼭 있어야 해";return}
+  const g=(r,i)=>i>=0?(r[i]||"").trim():"";
+  const L=rows.slice(1).filter(r=>g(r,I.n)).map(r=>{let e=g(r,I.e).replace(/[./]/g,"-").replace(/[^\d-]/g,"");const m=e.match(/(\d{1,2})-(\d{1,2})$/);
+    const st=g(r,I.st).replace(/[./]/g,"-").match(/(\d{1,2})-(\d{1,2})$/);
+    return {id:g(r,I.id).replace(/[^\d]/g,""),n:g(r,I.n).normalize("NFKC").replace(/\s+/g," "),c:g(r,I.c)||DEPT[num(g(r,I.d))]||"기타",s:st?st[1].padStart(2,"0")+"-"+st[2].padStart(2,"0"):"",o:num(g(r,I.o)),p:num(g(r,I.p)),e:m?m[1].padStart(2,"0")+"-"+m[2].padStart(2,"0"):"",src:"매장",t:g(r,I.t)?g(r,I.t).split(/[,\s]+/).filter(Boolean):[],hook:""}}).filter(x=>x.p);
+  DATA=L;
+  tag="전체";all();$("msg").textContent=`${L.length}개 상품으로 바꿨어`;location.hash="top";
+});
+$("reset")&&$("reset").addEventListener("click",()=>{DATA=BASE;tag="전체";all();$("msg").textContent="원래 리스트로 돌려놨어"});
+
+const DATA_URLS=["deals.json?v="+Math.floor(Date.now()/3e5)];
+const getDeals=async()=>{for(const u of DATA_URLS){try{const r=await fetch(u,{cache:"no-cache"});if(r.ok)return await r.json()}catch(e){}}throw new Error("no data")};
+getDeals().then(j=>{META=j.meta;BASE=DATA=j.items;
+  if(META.today){const[y,m,d]=META.today.split("-").map(Number);const now=kst();const t=new Date(y,m-1,d);TODAY=now>t?now:t}
+  const mon=new Date(TODAY);mon.setDate(mon.getDate()-((mon.getDay()+6)%7));const sun=new Date(mon);sun.setDate(mon.getDate()+6);
+  const f=x=>`${x.getMonth()+1}.${x.getDate()}`;MON=mon;
+  $("weekLabel").textContent=`${META.week||"이번주"} · ${f(mon)}(월) ~ ${f(sun)}(일)`;all()})
+.catch(()=>{$("grid").innerHTML='<div class="empty">할인 리스트를 불러오지 못했어요. 새로고침 해주세요.</div>'});
+}
+</script>
+</body>
+</html>
