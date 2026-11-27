@@ -35,6 +35,5 @@ git add -A && git commit -m "week YYYY-MM-DD" && git push
 ## 남은 일
 - [사용자] GoatCounter 가입(코드 `gollagolla`) → Settings에서 "Allow adding visitor counts on your website" 켜기
 - [사용자] 네이버 서치어드바이저·구글 서치콘솔 등록 (sitemap: https://gollagolla.kr/sitemap.xml)
-- [사용자] Cafe24 호스팅·SSL 환불 요청 (도메인은 유지!)
 - [사용자] 네이버 블로그 이름 '다라온파파' → '골라골라', 인스타 계정 만들기(카드뉴스는 수동 게시부터)
 - [나중] 애드센스, 가격비교 재개(그때 GitHub fine-grained 토큰 필요), 유튜브 영상픽(영상 생기면 노출)
