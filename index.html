@@ -353,7 +353,7 @@ function cmpCard(x,r){const hasCp=r.sellers.some(s=>s.key==="coupang"&&s.url);
     ${GC.html(r,{now:new Date(),period:x.s||x.e?`${md(x.s)}~${md(x.e)}`:""})}
     ${hasCp?"":buy(x)}</article>`}
 function renderCtl(){
-  $("tags").innerHTML=TAGS.map(t=>`<button class="chip" aria-pressed="${t===tag}" data-t="${esc(t)}">${esc(t)}</button>`).join("");
+  $("tags").innerHTML=TAGS.filter(t=>t!=="가격 비교"||DATA.some(x=>cmpOf(x))).map(t=>`<button class="chip" aria-pressed="${t===tag}" data-t="${esc(t)}">${esc(t)}</button>`).join("");
   const cats=[...new Set(DATA.map(x=>x.c))].sort();
   $("cat").innerHTML='<option value="">카테고리 전체</option>'+cats.map(c=>`<option>${esc(c)}</option>`).join("");
 }
