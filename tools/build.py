@@ -1,4 +1,5 @@
-"""카톡 할인 시트(CSV) -> deals.json. 사용: python3 build.py sheet.csv 2026-11-24"""
+"""카톡 할인 시트(CSV) -> deals.json (저장소 루트). 사용: python3 tools/build.py data/sheets/sheet_2026-11-30.csv 2026-11-30
+순위 신호 파일은 tools/data/ 에 있음. 이전 deals.json의 쿠팡 링크(cp)는 상품코드로 이어 붙임."""
 import csv, json, re, sys, unicodedata
 from datetime import date
 
@@ -70,7 +71,8 @@ for key, hook, hero in PICKS:
 
 # 인기점수(100): 작년 같은 시기 인기 30 + 올해 지금 관심 25 + 판매 검증 15 + 할인 매력 20 + 시즌 10
 import math, os
-J = lambda f: json.load(open(f, encoding="utf-8")) if os.path.exists(f) else {}
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
+J = lambda f: (lambda q: json.load(open(q, encoding="utf-8")) if os.path.exists(q) else {})(os.path.join(HERE, "data", f))
 G = J("google.json")                         # 상품 키워드별 구글 검색지수(최근 30일, 프링글스=100)
 SIG = J("signals.json").get("rows", [])      # 코스트코 리뷰 수·공식 베스트
 TERMS = J("gt/terms.json").get("map", {})
@@ -138,6 +140,12 @@ for x in out: x.pop("_stock"); x.pop("_dept")
 print("TOP20:"); [print(x["rk"], x["sc"], x["c"], x["n"], x["p"]) for x in out[:20]]
 
 meta = {"week": f"{today.month}월 {(today.day-1)//7+1}주차", "from": min(x["s"] for x in out), "today": today.isoformat(), "count": len(out)}
-json.dump({"meta": meta, "items": out}, open("deals.json", "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+OUT = os.path.join(ROOT, "deals.json")
+# 지난주 링크 이어 붙이기(같은 상품코드면 같은 쿠팡 링크 재사용 → API 호출 줄임)
+prev = json.load(open(OUT, encoding="utf-8")) if os.path.exists(OUT) else {"items": []}
+pcp = {x.get("id"): x.get("cp") for x in prev.get("items", []) if x.get("id") and x.get("cp")}
+for x in out:
+    if not x.get("cp") and pcp.get(x.get("id")): x["cp"] = pcp[x["id"]]
+json.dump({"meta": meta, "items": out}, open(OUT, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
 print(len(out), "개 →", "deals.json", meta)
 print("기타 카테고리:", sorted({x["n"] for x in out if x["c"]=="기타"})[:10])

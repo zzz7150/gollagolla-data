@@ -63,7 +63,7 @@ def row(i, x):
     end = f'{md(x["_e"])}까지' if x["_e"] else "온라인 상시"
     was = f'<s>{won(x["o"])}</s> ' if x["o"] > x["p"] else ""
     code = f' · 상품코드 {esc(x["id"])}' if x.get("id") else ""
-    return (f'<li class="it"><span class="no">{i}</span><div class="bd"><h3>{esc(x["n"])}</h3>'
+    return (f'<li class="it" data-id="{esc(x.get("id",""))}"><span class="no">{i}</span><div class="bd"><h3>{esc(x["n"])}</h3>'
             f'<p class="mt">{esc(x["c"])}{code} · {end}</p>{f"<p class=tgs>{tg}</p>" if tg else ""}</div>'
             f'<div class="pr"><span class="sl">코스트코 매장가</span>{was}<b>{won(x["p"])}</b>'
             f'{f"<em>-{x[chr(112)+chr(99)]}%</em>" if x["pc"] else ""}{buy(x)}</div></li>')
@@ -94,7 +94,7 @@ def page(path, title, desc, h1, lead, rows, extra_nav=True):
 <meta property="og:type" content="website"><meta property="og:site_name" content="골라골라"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{url}"><meta property="og:image" content="{SITE}/og.png"><meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
-<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script><style>{CSS}</style></head><body>
+<script data-goatcounter="https://gollagolla.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script><script>/* 구매 버튼 클릭 집계(이동은 막지 않음) */document.addEventListener("click",e=>{{const a=e.target.closest("a.cp,a.gbtn");if(!a)return;const card=a.closest("article,.row,.it,.hot,.pick");const code=(card&&(card.dataset.id||(card.querySelector(".code")||{{}}).textContent)||"").replace(/[^\\d]/g,"");const who=a.classList.contains("naver")?"naver":"coupang";try{{window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({{path:"click/"+who,event:true}}),window.goatcounter.count({{path:"click/"+who+(code?"/"+code:""),title:(card&&(card.querySelector("b,.nm,h3")||{{}}).textContent||"").trim().slice(0,60),event:true}})}}catch(_){{}}}},true);</script><script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script><style>{CSS}</style></head><body>
 <div class="disc">이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
 <header class="top"><a href="/">골라골라</a></header><main><h1>{esc(h1)}</h1><p class="lead">{esc(lead)}</p><nav class="nav">{nav}</nav>
 <p class="mt">가격은 코스트코 매장 행사가예요. 지점마다 행사·재고가 다를 수 있어요. ‘쿠팡’ 버튼은 제휴 링크이고 쿠팡 가격·용량은 다를 수 있어요.</p>
