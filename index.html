@@ -94,6 +94,8 @@ mark,.hl{background:linear-gradient(transparent 55%,var(--hl) 55%);color:inherit
 .hb .buy{justify-content:center}
 .seller{font-size:13px;font-weight:700;color:var(--mute);margin-top:4px}
 .aff{font-size:13px;color:var(--mute);margin:-6px 0 14px}
+.rv{font-size:13px;font-weight:700;color:var(--blue);margin-top:4px}
+.card.cmp{border:2px solid var(--blue)}
 .disc{background:var(--yel);color:#16110f;font-size:13px;font-weight:700;text-align:center;padding:6px 12px;line-height:1.4}
 /* 영상 픽 */
 .picks{counter-reset:k;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
@@ -254,6 +256,8 @@ footer li{margin-bottom:4px}
   </div>
 </footer>
 
+<script src="compare.js" charset="utf-8"></script>
+<script>window.GC&&document.head.insertAdjacentHTML("beforeend","<style>"+GC.CSS+"</style>")</script>
 <script>
 {
 const kst=()=>{const n=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Seoul"}));n.setHours(0,0,0,0);return n};
@@ -292,7 +296,7 @@ const qname=n=>n.replace(/\s\d.*$/,"").replace(/[()#*]/g," ").replace(/\s+/g," "
 const buy=x=>{const q=encodeURIComponent(qname(x.n));const cp=x.cp||`https://www.coupang.com/np/search?q=${q}`;const same=/AFFSDP/.test(x.cp||"");return `<div class="buy"><a class="cp" href="${esc(cp)}" target="_blank" rel="noopener sponsored">${same?"쿠팡 같은 상품 보기":"쿠팡에서 검색"}</a></div>`};
 const DEPT={12:"과자·간식",13:"가공식품",14:"생활·음료",16:"주류",17:"냉장식품",18:"냉동식품",19:"치즈·델리",20:"뷰티·위생",23:"생활·공구",24:"가전·디지털",25:"자동차용품",26:"스포츠·레저",27:"원예·시즌",28:"크리스마스·시즌",31:"의류·잡화",35:"의류·잡화",39:"의류·잡화",32:"주방용품",33:"주방가전·커피",34:"침구",38:"가구·인테리어",44:"가구·인테리어",61:"정육",62:"베이커리",63:"델리·간편식",64:"수산·건어물",65:"과일·채소",93:"건강식품"};
 let BASE=[], META={};
-const TAGS=["전체","이번주 시작","마감임박","겨울","연말","블프","인기","추천","매장","온라인"];
+const TAGS=["전체","가격 비교","이번주 시작","마감임박","겨울","연말","블프","인기","추천","매장","온라인"];
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 const won=n=>Number(n).toLocaleString("ko-KR")+"원";
 const days=e=>{const t=toD(e);return t?Math.round((t-TODAY)/864e5):99};
@@ -315,7 +319,7 @@ function renderRank(){
   const top=cats.slice(0,1).concat(cats.slice(1).sort((a,b)=>L.filter(x=>x.c===b).length-L.filter(x=>x.c===a).length).slice(0,7));
   $("rtabs").innerHTML=top.map(c=>`<button class="chip" aria-pressed="${c===rcat}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
   const R=L.filter(x=>rcat==="전체"||x.c===rcat).sort((a,b)=>a.rk-b.rk).slice(0,20);
-  $("rankList").innerHTML=R.length?R.map((x,i)=>`<div class="row"><div class="no">${i+1}</div>${thumb(x)}<div><b>${esc(x.n)}</b>${code(x)}<small>${esc(x.c)} · ${x.pc}% 할인 · ${esc(endTxt(x))}</small>${sigs(x)}<div class="meter" title="인기점수 ${x.sc}"><i style="width:${Math.max(4,Math.min(100,x.sc))}%"></i></div></div><div class="pr"><b>${won(x.p)}</b><br><small>점수 ${x.sc}</small>${buy(x)}</div></div>`).join(""):'<div class="empty">순위 정보가 없는 리스트예요</div>';
+  $("rankList").innerHTML=R.length?R.map((x,i)=>`<div class="row"><div class="no">${i+1}</div>${thumb(x)}<div><b>${esc(x.n)}</b>${code(x)}<small>${esc(x.c)} · ${x.pc}% 할인 · ${esc(endTxt(x))}</small>${(()=>{const r=cmpRes(x);return r&&r.has&&r.verdict?`<div class="rv">${esc(r.verdict)}</div>`:""})()}${sigs(x)}<div class="meter" title="인기점수 ${x.sc}"><i style="width:${Math.max(4,Math.min(100,x.sc))}%"></i></div></div><div class="pr"><b>${won(x.p)}</b><br><small>점수 ${x.sc}</small>${buy(x)}</div></div>`).join(""):'<div class="empty">순위 정보가 없는 리스트예요</div>';
 }
 function renderGrid(){
   const q=$("q").value.trim().toLowerCase(), c=$("cat").value, so=$("sort").value;
@@ -323,6 +327,7 @@ function renderGrid(){
     if(q&&!x.n.toLowerCase().includes(q)&&!(x.id||"").includes(q))return false;
     if(c&&x.c!==c)return false;
     if(tag==="전체")return true;
+    if(tag==="가격 비교")return !!cmpOf(x);
     if(tag==="이번주 시작")return !!(x.s&&MON&&toD(x.s)>=MON);
     if(tag==="마감임박")return x.e&&days(x.e)<=5;
     if(tag==="매장"||tag==="온라인")return (x.src||"매장")===tag;
@@ -331,13 +336,22 @@ function renderGrid(){
   L.sort(f);
   $("count").textContent=`${L.length}개 상품`; const all=L.length; L=L.slice(0,shown);
   $("more").hidden=shown>=all; $("more").textContent=`더 보기 (${all-L.length}개 남음)`;
-  $("grid").innerHTML=L.length?L.map(x=>{const d=days(x.e);return `<article class="card">${x.pc?`<span class="pct">-${x.pc}%</span>`:""}
+  $("grid").innerHTML=L.length?L.map(x=>{const d=days(x.e);const cm=cmpRes(x);if(cm&&cm.has)return cmpCard(x,cm);return `<article class="card">${x.pc?`<span class="pct">-${x.pc}%</span>`:""}
     <div class="head">${thumb(x)}<div><span class="cat">${esc(x.c)}${x.crk&&x.crk<=10?` · <b class="rk">${esc(x.c.split("/")[0])} 인기 ${x.crk}위</b>`:""}</span><div class="nm" style="padding-right:0">${esc(x.n)}</div>${code(x)}</div></div>
     <div class="was">${x.o>x.p?`<s>${won(x.o)}</s>${won(x.am)} 할인`:"온라인 스낵딜 특가"}</div>
     <div class="seller">코스트코 매장가</div><div class="price">${won(x.p)}</div>
     <div class="meta"><span class="tag ${x.src==="온라인"?"on":""}">${esc(x.src||"매장")}</span>${x.lim?`<span class="tag soon">${esc(x.lim)}</span>`:""}${x.chk?`<span class="tag soon">가격 확인 필요</span>`:""}<span class="tag ${x.e&&d<=5?"soon":""}">${esc(endTxt(x))}</span>${(x.t||[]).map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>
     <div class="cat">${esc(md(x.s))} ~ ${esc(md(x.e))}</div>${buy(x)}</article>`}).join(""):'<div class="empty">조건에 맞는 상품이 없어요</div>';
 }
+/* 가격 비교: compare.json (관리자 페이지에서 저장). 없으면 기존 카드 그대로 */
+let CMP={settings:{staleHours:72},items:{}};
+const cmpOf=x=>{if(!window.GC)return null;const e=CMP.items[GC.keyOf(x)];return e&&e.offers&&Object.values(e.offers).some(o=>o&&o.price!==null&&o.price!==""&&o.price!==undefined)?e:null};
+const cmpRes=x=>{const e=cmpOf(x);if(!e)return null;return GC.compute(x,e,{now:new Date(),daysLeft:x.e?days(x.e):null,staleHours:CMP.settings&&CMP.settings.staleHours})};
+function cmpCard(x,r){const hasCp=r.sellers.some(s=>s.key==="coupang"&&s.url);
+  return `<article class="card cmp">${x.pc?`<span class="pct">-${x.pc}%</span>`:""}
+    <div class="head"><div><span class="cat">${esc(x.c)}${x.rk?` · <b class="rk">인기 ${x.rk}위</b>`:""}</span><div class="nm" style="padding-right:0">${esc(x.n)}</div>${code(x)}</div></div>
+    ${GC.html(r,{now:new Date(),period:x.s||x.e?`${md(x.s)}~${md(x.e)}`:""})}
+    ${hasCp?"":buy(x)}</article>`}
 function renderCtl(){
   $("tags").innerHTML=TAGS.map(t=>`<button class="chip" aria-pressed="${t===tag}" data-t="${esc(t)}">${esc(t)}</button>`).join("");
   const cats=[...new Set(DATA.map(x=>x.c))].sort();
@@ -368,7 +382,8 @@ $("reset")&&$("reset").addEventListener("click",()=>{DATA=BASE;tag="전체";all(
 
 const DATA_URLS=["deals.json?v="+Math.floor(Date.now()/3e5)];
 const getDeals=async()=>{for(const u of DATA_URLS){try{const r=await fetch(u,{cache:"no-cache"});if(r.ok)return await r.json()}catch(e){}}throw new Error("no data")};
-getDeals().then(j=>{META=j.meta;BASE=DATA=j.items;
+const getCmp=async()=>{try{const r=await fetch("compare.json?v="+Math.floor(Date.now()/6e4),{cache:"no-cache"});if(r.ok){const j=await r.json();if(j&&j.items)CMP=j}}catch(e){}};
+Promise.all([getDeals(),getCmp()]).then(([j])=>{META=j.meta;BASE=DATA=j.items;
   if(META.today){const[y,m,d]=META.today.split("-").map(Number);const now=kst();const t=new Date(y,m-1,d);TODAY=now>t?now:t}
   const mon=new Date(TODAY);mon.setDate(mon.getDate()-((mon.getDay()+6)%7));const sun=new Date(mon);sun.setDate(mon.getDate()+6);
   const f=x=>`${x.getMonth()+1}.${x.getDate()}`;MON=mon;

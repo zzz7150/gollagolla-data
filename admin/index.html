@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>골라골라 관리자 · 가격 비교 입력</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#f4f1ea,#15110f);--paper:light-dark(#fff,#211b18);--ink:light-dark(#16110f,#f7f2ec);--mute:light-dark(#4f4741,#cdc3b9);--red:light-dark(#d4211a,#ff6a5e);--blue:light-dark(#1747a6,#8fb2ff);--line:light-dark(#e3dbd0,#3d342f)}
+*{box-sizing:border-box;min-width:0}body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 "Noto Sans KR","Malgun Gothic",sans-serif}
+header{background:var(--red);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}header b{font-size:20px;font-weight:900}
+main{max-width:1100px;margin:0 auto;padding:16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media(max-width:860px){main{grid-template-columns:1fr}}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px}
+h2{font-size:18px;margin:0 0 10px;font-weight:900}h3{font-size:15px;margin:14px 0 6px;font-weight:900}
+label{display:block;font-size:13px;font-weight:700;color:var(--mute);margin-top:6px}
+input,select,textarea{font:16px "Noto Sans KR",sans-serif;width:100%;min-height:42px;padding:6px 10px;border:2px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+textarea{min-height:60px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+button{font:700 15px "Noto Sans KR",sans-serif;min-height:42px;padding:0 14px;border-radius:8px;border:0;background:var(--ink);color:var(--paper);cursor:pointer}
+button.red{background:var(--red);color:#fff}button.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.list{max-height:320px;overflow:auto;margin-top:8px;border-top:1px solid var(--line)}
+.li{padding:8px 4px;border-bottom:1px solid var(--line);cursor:pointer;display:flex;justify-content:space-between;gap:8px}.li:hover,.li.on{background:var(--bg)}
+.li small{color:var(--mute)}.pill{font-size:12px;font-weight:700;padding:1px 6px;border-radius:4px;background:var(--line)}.pill.ok{background:var(--blue);color:#fff}.pill.warn{background:var(--red);color:#fff}
+fieldset{border:2px solid var(--line);border-radius:10px;padding:8px 12px 12px;margin:10px 0}legend{font-weight:900;padding:0 6px}
+.chk{display:flex;align-items:center;gap:6px;font-weight:700;color:var(--ink);font-size:14px}.chk input{width:auto;min-height:0}
+#msg{font-weight:700;color:var(--blue);min-height:1.5em}.hint{font-size:13px;color:var(--mute)}
+.prev .card{background:var(--paper);border:2px solid var(--blue);border-radius:12px;padding:14px}
+.prev .nm{font-weight:700;font-size:17px}.mono{font:13px ui-monospace,monospace;word-break:break-all}
+</style>
+<script src="../compare.js" charset="utf-8"></script>
+<script>window.GC&&document.head.insertAdjacentHTML("beforeend","<style>"+GC.CSS+"</style>")</script>
+</head>
+<body>
+<header><b>골라골라 관리자 · 가격 비교 입력</b><span id="who" class="hint" style="color:#fff"></span></header>
+<main>
+  <section class="box" style="grid-column:1/-1">
+    <h2>저장 연결</h2>
+    <p class="hint">저장하면 깃허브의 compare.json이 바뀌고 1~2분 뒤 사이트에 반영돼요. 깃허브에서 만든 <b>저장용 토큰</b>을 이 기기에만 보관해요(다른 사람에게 보내지 마세요).</p>
+    <div class="row"><input id="tok" type="password" placeholder="깃허브 토큰 (github_pat_...)" style="flex:1 1 280px" autocomplete="off">
+      <button id="tokSave">이 기기에 저장</button><button class="ghost" id="tokDel">토큰 지우기</button></div>
+    <div class="row"><label style="margin:0">온라인 가격 유효 시간(시간)</label><input id="stale" type="number" min="1" style="width:110px"><span class="hint">이 시간이 지나면 ‘가격 재확인 필요’로 바뀌고 비교에서 빠져요</span></div>
+    <div id="msg"></div>
+  </section>
+
+  <section class="box">
+    <h2>1. 상품 고르기</h2>
+    <input id="q" placeholder="상품명이나 상품코드로 찾기 (예: 핫팩, 684832)">
+    <div class="row"><button class="ghost" id="onlyCmp">비교 입력한 상품만</button><span class="hint" id="cnt"></span></div>
+    <div class="list" id="list"></div>
+    <h3>콘텐츠용 추천 문구 (블로그·인스타·유튜브 복사용)</h3>
+    <textarea id="hooks" readonly style="min-height:110px"></textarea>
+    <div class="row"><button class="ghost" id="copyHooks">전체 복사</button></div>
+  </section>
+
+  <section class="box">
+    <h2>2. 비교 정보 입력</h2>
+    <div id="sel" class="hint">왼쪽에서 상품을 골라주세요.</div>
+    <form id="f" hidden>
+      <fieldset><legend>코스트코 매장</legend>
+        <div class="hint" id="storeInfo"></div>
+        <div class="g3"><div><label>판매 구성 수량(개)</label><input name="s_qty" type="number" min="0" step="any"></div>
+          <div><label>1개당 용량</label><input name="s_per" type="number" min="0" step="any" placeholder="g·mL일 때만"></div>
+          <div><label>단가 기준</label><select name="s_kind"><option value="ea">개당</option><option value="g">100g당</option><option value="ml">100mL당</option></select></div></div>
+        <label>적용 지점</label><input name="s_branch" placeholder="예: 하남점 확인 / 전 지점(지점마다 다를 수 있음)">
+      </fieldset>
+      <div id="offers"></div>
+      <fieldset><legend>기타</legend>
+        <label>추천 이유 한 줄 (콘텐츠용)</label><input name="hook" placeholder="예: 핫팩은 매장 30개가 개당 350원꼴로 제일 싸요"><div class="row"><button type="button" class="ghost" id="copyHook">이 문구 복사</button></div>
+        <label>조건 메모 (회원가·카드 할인·쿠폰·지역 배송비 등)</label><textarea name="memo"></textarea>
+      </fieldset>
+      <div class="row"><button class="red" type="submit">저장하기</button><button type="button" class="ghost" id="del">이 상품 비교 삭제</button><button type="button" class="ghost" id="dl">compare.json 복사(토큰 없을 때)</button></div>
+    </form>
+  </section>
+
+  <section class="box prev" style="grid-column:1/-1">
+    <h2>3. 사이트 카드 미리보기</h2>
+    <div id="prev" class="hint">입력하면 바로 보여요.</div>
+  </section>
+</main>
+<script>
+{
+const REPO="zzz7150/gollagolla-data", PATH="compare.json", API=`https://api.github.com/repos/${REPO}/contents/${PATH}`;
+const $=id=>document.getElementById(id), esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const won=n=>Number(n).toLocaleString("ko-KR")+"원";
+const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+let DEALS=[], CMP={settings:{staleHours:72},items:{}}, SHA=null, cur=null, onlyCmp=false;
+const kst=()=>{const n=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Seoul"}));n.setHours(0,0,0,0);return n};
+const toD=e=>{if(!e)return null;const a=e.split("-").map(Number);if(a.length===3)return new Date(a[0],a[1]-1,a[2]);const T=kst();let t=new Date(T.getFullYear(),a[0]-1,a[1]);if(t-T>1555e7)t=new Date(T.getFullYear()-1,a[0]-1,a[1]);else if(T-t>1555e7)t=new Date(T.getFullYear()+1,a[0]-1,a[1]);return t};
+const daysLeft=x=>{const t=toD(x.e);return t?Math.round((t-kst())/864e5):null};
+const md=e=>e?e.slice(-5).replace("-","."):"";
+const msg=t=>{$("msg").textContent=t};
+const b64e=s=>btoa(unescape(encodeURIComponent(s))), b64d=s=>decodeURIComponent(escape(atob(s.replace(/\n/g,""))));
+const tok=()=>store.get("gc_token")||"";
+
+async function load(){
+  try{const r=await fetch("../deals.json?v="+Date.now(),{cache:"no-cache"});DEALS=(await r.json()).items}catch(e){msg("할인 리스트를 못 불러왔어요")}
+  await loadCmp(); render();
+}
+async function loadCmp(){
+  if(tok()){
+    try{const r=await fetch(API+"?ref=main",{headers:{Authorization:"Bearer "+tok(),Accept:"application/vnd.github+json"},cache:"no-cache"});
+      if(r.ok){const j=await r.json();SHA=j.sha;CMP=JSON.parse(b64d(j.content));$("who").textContent="저장 연결됨";return}
+      $("who").textContent=r.status===401?"토큰이 맞지 않아요":"깃허브 읽기 실패("+r.status+")"}catch(e){$("who").textContent="깃허브 연결 실패"}
+  }
+  try{const r=await fetch("../compare.json?v="+Date.now(),{cache:"no-cache"});if(r.ok)CMP=await r.json()}catch(e){}
+  if(!tok())$("who").textContent="보기 전용 (토큰 없음)";
+}
+CMP.settings=CMP.settings||{staleHours:72};
+const key=x=>GC.keyOf(x);
+const hasCmp=x=>!!(CMP.items&&CMP.items[key(x)]);
+function status(x){const e=CMP.items[key(x)];if(!e)return "";const r=GC.compute(x,e,{now:new Date(),daysLeft:daysLeft(x),staleHours:CMP.settings.staleHours});
+  const st=r.sellers.some(s=>s.stale)?'<span class="pill warn">재확인 필요</span>':'<span class="pill ok">비교 중</span>';return r.store.ended?'<span class="pill warn">매장 종료</span>':st}
+function render(){
+  $("stale").value=CMP.settings.staleHours||72;
+  const q=$("q").value.trim().toLowerCase();
+  let L=DEALS.filter(x=>(!q||x.n.toLowerCase().includes(q)||(x.id||"").includes(q))&&(!onlyCmp||hasCmp(x)));
+  L.sort((a,b)=>(hasCmp(b)-hasCmp(a))||((a.rk||1e9)-(b.rk||1e9)));
+  $("cnt").textContent=`${L.length}개 · 비교 입력 ${DEALS.filter(hasCmp).length}개`;
+  $("list").innerHTML=L.slice(0,150).map(x=>`<div class="li ${cur&&key(cur)===key(x)?"on":""}" data-k="${esc(key(x))}"><span>${esc(x.n)}<br><small>${x.id?"상품코드 "+esc(x.id)+" · ":""}${won(x.p)} · ~${md(x.e)}${x.rk?` · 인기 ${x.rk}위`:""}</small></span>${status(x)}</div>`).join("")||'<p class="hint">없어요</p>';
+  $("hooks").value=DEALS.filter(hasCmp).map(x=>{const e=CMP.items[key(x)];return e.hook?`${x.n}: ${e.hook}`:null}).filter(Boolean).join("\n");
+}
+const OFF=[["coupang","쿠팡"],["naver","네이버 (쇼핑 커넥트)"]];
+$("offers").innerHTML=OFF.map(([k,n])=>`<fieldset><legend>${n} <span class="hint">(선택 입력)</span></legend>
+  <div class="g2"><div><label>상품가(원)</label><input name="${k}_price" type="number" min="0"></div>
+    <div><label>배송비</label><div class="g2"><select name="${k}_shipMode"><option value="unk">미확인</option><option value="free">무료배송(0원)</option><option value="num">금액 입력</option></select><input name="${k}_ship" type="number" min="0" placeholder="원"></div></div></div>
+  <div class="g3"><div><label>판매 구성 수량(개)</label><input name="${k}_qty" type="number" min="0" step="any"></div><div><label>1개당 용량</label><input name="${k}_per" type="number" min="0" step="any" placeholder="g·mL일 때만"></div>
+    <div><label>단가 기준</label><select name="${k}_kind"><option value="ea">개당</option><option value="g">100g당</option><option value="ml">100mL당</option></select></div></div>
+  <label>상품 일치 여부</label><select name="${k}_match"><option value="same">동일 제품·동일 구성</option><option value="qty">동일 제품·수량만 다름</option><option value="unknown">비교 조건 미확인</option></select>
+  <div class="g2"><div><label>가격 확인 시각</label><input name="${k}_checked" type="datetime-local"></div><div><label>&nbsp;</label><button type="button" class="ghost" data-now="${k}">지금 시각으로</button></div></div>
+  <label>구매 URL</label><input name="${k}_url" type="url" placeholder="https://">
+  <label>링크 구분</label><select name="${k}_aff"><option value="1">제휴 링크 (파트너스·쇼핑 커넥트)</option><option value="0">일반 링크</option></select>
+  <div class="g2"><div><label>조건부 가격(원, 선택)</label><input name="${k}_condPrice" type="number" min="0"></div><div><label>조건 (회원가·카드·쿠폰)</label><input name="${k}_cond"></div></div>
+  <label class="chk"><input type="checkbox" name="${k}_multiOk"> 여러 묶음을 실제로 살 수 있고 합산 배송비를 확인했어요</label>
+  <label>매장 수량만큼 살 때 합산 배송비(원)</label><input name="${k}_multiShip" type="number" min="0">
+</fieldset>`).join("");
+
+const F=()=>$("f").elements;
+const v=n=>{const el=F()[n];return el?el.value:""};
+const num=s=>s===""||s===null||s===undefined?null:(isFinite(+s)?+s:null);
+const localDT=iso=>{if(!iso)return "";const d=new Date(iso);if(isNaN(d))return "";const k=new Date(d.toLocaleString("en-US",{timeZone:"Asia/Seoul"}));const p=x=>String(x).padStart(2,"0");return `${k.getFullYear()}-${p(k.getMonth()+1)}-${p(k.getDate())}T${p(k.getHours())}:${p(k.getMinutes())}`};
+const fromLocal=s=>s?new Date(s+":00+09:00").toISOString():"";
+function fill(x){
+  cur=x;const e=CMP.items[key(x)]||{};const s=e.store||{};$("f").hidden=false;
+  $("sel").innerHTML=`<b>${esc(x.n)}</b><br>상품코드 ${esc(x.id||"없음")} · 매장 할인가 ${won(x.p)} · ${md(x.s)}~${md(x.e)}${x.rk?` · 인기 ${x.rk}위(순위는 비교와 무관)`:""}`;
+  $("storeInfo").textContent=`할인가·기간은 주간 업로드 값을 그대로 써요: ${won(x.p)} · ${md(x.s)}~${md(x.e)}`;
+  const set=(n,val)=>{const el=F()[n];if(!el)return;if(el.type==="checkbox")el.checked=!!val;else el.value=val??""};
+  set("s_qty",s.qty);set("s_per",s.per);set("s_kind",s.kind||"ea");set("s_branch",s.branch);set("hook",e.hook);set("memo",e.memo);
+  for(const [k] of OFF){const o=(e.offers||{})[k]||{};set(k+"_price",o.price);
+    set(k+"_shipMode",o.ship===null||o.ship===undefined||o.ship===""?"unk":o.ship===0?"free":"num");set(k+"_ship",o.ship>0?o.ship:"");
+    set(k+"_qty",o.qty);set(k+"_per",o.per);set(k+"_kind",o.kind||s.kind||"ea");set(k+"_match",o.match||"same");set(k+"_checked",localDT(o.checkedAt));
+    set(k+"_url",o.url);set(k+"_aff",o.aff===false?"0":"1");set(k+"_condPrice",o.condPrice);set(k+"_cond",o.cond);set(k+"_multiOk",o.multiOk);set(k+"_multiShip",o.multiShip)}
+  render();preview();
+}
+function collect(){
+  const e={store:{qty:num(v("s_qty")),per:num(v("s_per")),kind:v("s_kind"),branch:v("s_branch").trim()},hook:v("hook").trim(),memo:v("memo").trim(),offers:{},updatedAt:new Date().toISOString(),name:cur.n};
+  for(const [k] of OFF){const price=num(v(k+"_price"));if(price===null)continue;const mode=v(k+"_shipMode");
+    e.offers[k]={price,ship:mode==="free"?0:mode==="num"?num(v(k+"_ship")):null,qty:num(v(k+"_qty")),per:num(v(k+"_per")),kind:v(k+"_kind"),match:v(k+"_match"),
+      checkedAt:fromLocal(v(k+"_checked")),url:v(k+"_url").trim(),aff:v(k+"_aff")==="1",condPrice:num(v(k+"_condPrice")),cond:v(k+"_cond").trim(),
+      multiOk:F()[k+"_multiOk"].checked,multiShip:num(v(k+"_multiShip"))}}
+  return e;
+}
+function preview(){
+  if(!cur){return}const e=collect();
+  const r=GC.compute(cur,e,{now:new Date(),daysLeft:daysLeft(cur),staleHours:num($("stale").value)||72});
+  $("prev").innerHTML=r.has?`<div class="card"><div class="nm">${esc(cur.n)}</div>${GC.html(r,{now:new Date(),period:`${md(cur.s)}~${md(cur.e)}`})}</div>`
+    :'<p class="hint">쿠팡이나 네이버 상품가를 하나 이상 넣으면 비교 카드가 생겨요. 없으면 사이트에는 기존 카드로 보여요.</p>';
+}
+async function save(next){
+  if(!tok()){msg("토큰이 없어서 저장할 수 없어요. ‘compare.json 복사’로 내용을 복사할 수 있어요.");return false}
+  CMP.settings={...(CMP.settings||{}),staleHours:num($("stale").value)||72};
+  const body=JSON.stringify(next||CMP,null,1);
+  msg("저장 중…");
+  try{
+    // 최신 sha 다시 받기(다른 기기에서 저장했을 수 있음)
+    const g=await fetch(API+"?ref=main",{headers:{Authorization:"Bearer "+tok(),Accept:"application/vnd.github+json"},cache:"no-cache"});
+    if(g.ok){const j=await g.json();SHA=j.sha;const remote=JSON.parse(b64d(j.content));
+      // 다른 상품 항목은 서버 쪽 최신 것을 유지하고, 지금 고친 상품만 덮어씀
+      if(cur){const k=key(cur);const merged={...remote,settings:CMP.settings,items:{...(remote.items||{})}};if(CMP.items[k])merged.items[k]=CMP.items[k];else delete merged.items[k];CMP=merged}}
+    const r=await fetch(API,{method:"PUT",headers:{Authorization:"Bearer "+tok(),Accept:"application/vnd.github+json","Content-Type":"application/json"},
+      body:JSON.stringify({message:`가격 비교 수정: ${cur?cur.n:"설정"}`,content:b64e(JSON.stringify(CMP,null,1)),sha:SHA||undefined,branch:"main"})});
+    if(!r.ok){msg("저장 실패 ("+r.status+"). 토큰 권한(Contents 읽기·쓰기)을 확인해 주세요.");return false}
+    const j=await r.json();SHA=j.content.sha;msg("저장했어요. 1~2분 뒤 사이트에 반영돼요.");render();return true;
+  }catch(e){msg("저장 중 오류가 났어요. 인터넷 연결을 확인해 주세요.");return false}
+}
+$("list").addEventListener("click",ev=>{const el=ev.target.closest(".li");if(!el)return;const x=DEALS.find(d=>key(d)===el.dataset.k);if(x)fill(x)});
+$("q").addEventListener("input",render);
+$("onlyCmp").addEventListener("click",()=>{onlyCmp=!onlyCmp;$("onlyCmp").textContent=onlyCmp?"전체 상품 보기":"비교 입력한 상품만";render()});
+$("f").addEventListener("input",preview);$("f").addEventListener("change",preview);$("stale").addEventListener("input",preview);
+$("f").addEventListener("click",ev=>{const b=ev.target.closest("[data-now]");if(!b)return;F()[b.dataset.now+"_checked"].value=localDT(new Date().toISOString());preview()});
+$("f").addEventListener("submit",async ev=>{ev.preventDefault();if(!cur)return;CMP.items=CMP.items||{};const e=collect();
+  if(!Object.keys(e.offers).length&&!e.hook&&!e.memo){msg("쿠팡·네이버 가격이나 추천 문구 중 하나는 넣어주세요");return}
+  CMP.items[key(cur)]=e;await save()});
+$("del").addEventListener("click",async()=>{if(!cur||!CMP.items[key(cur)])return;delete CMP.items[key(cur)];await save();fill(cur)});
+$("tokSave").addEventListener("click",async()=>{const t=$("tok").value.trim();if(!t)return;store.set("gc_token",t);$("tok").value="";msg("이 기기에 저장했어요");await loadCmp();render()});
+$("tokDel").addEventListener("click",()=>{store.del("gc_token");$("who").textContent="보기 전용 (토큰 없음)";msg("토큰을 지웠어요")});
+const copy=async t=>{try{await navigator.clipboard.writeText(t);msg("복사했어요")}catch(e){msg("복사가 안 돼요. 직접 선택해서 복사해 주세요")}};
+$("copyHook").addEventListener("click",()=>copy(v("hook")));
+$("copyHooks").addEventListener("click",()=>copy($("hooks").value));
+$("dl").addEventListener("click",()=>{if(cur){const e=collect();if(Object.keys(e.offers).length)CMP.items[key(cur)]=e}copy(JSON.stringify(CMP,null,1))});
+load();
+}
+</script>
+</body>
+</html>
