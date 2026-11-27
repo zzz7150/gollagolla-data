@@ -126,7 +126,7 @@ for slug, name, cs in CATS:
 idx = os.path.join(ROOT, "index.html"); s = open(idx, encoding="utf-8").read()
 pre = "".join(f'<div class="row"><div class="no">{i+1}</div><div><b>{esc(x["n"])}</b><small>{esc(x["c"])} · {x["pc"]}% 할인 · {md(x["_e"])}까지</small></div><div class="pr"><b>{won(x["p"])}</b></div></div>' for i, x in enumerate(ok[:20]))
 s = re.sub(r'<div class="rank" id="rankList">.*?</div>\s*</div>\s*</section>', f'<div class="rank" id="rankList">{pre}</div>\n  </div>\n</section>', s, count=1, flags=re.S)
-s = re.sub(r'<p class="seo-links">.*?</p>', "", s, flags=re.S)
+s = re.sub(r'<p class="seo-links"[^>]*>.*?</p>\n?', "", s, flags=re.S)
 links = " · ".join(f'<a href="/{p}">{esc(t)}</a>' for p, t in NAV)
 s = s.replace('<footer class="band" id="about">', f'<p class="seo-links" style="text-align:center;font-size:14px;padding:0 16px 20px">{links}</p>\n<footer class="band" id="about">', 1)
 open(idx, "w", encoding="utf-8").write(s)
